@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 12:50:40 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/08 12:50:40 by anfichet         ###   ########.fr       */
+/*   Created: 2024/03/12 19:11:57 by anfichet          #+#    #+#             */
+/*   Updated: 2024/03/12 19:11:57 by anfichet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "pipex.h"
 
-int main(int argc, char **argv)
-{
-	(void)argv;
-	(void)argc;
-	pid_t	pid;
+#ifndef PIPEX_H
+# define PIPEX_H
 
-	printf("je fork ici\n");
-	pid = fork();
-	if (pid == -1)
-		return (-1);
-	printf("fork reussi\n");
-	if (pid == 0)
-		printf("Fils = je suis le fils, mon pid est %d\n", pid);
-	else if (pid > 0)
-		printf("Pere = je suis le pere, le pid de mon fils est %d\n", pid);
-	return (0);
-}
+# include "libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdio.h>
 
+
+
+#endif

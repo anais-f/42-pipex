@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/16 18:25:46 by anfichet          #+#    #+#              #
-#    Updated: 2024/01/31 14:49:28 by anfichet         ###   ########.fr        #
+#    Created: 2024/03/08 18:25:46 by anfichet          #+#    #+#              #
+#    Updated: 2024/03/12 10:50:25 by anfichet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ LIBS_TARGET = ./libft/libft.a
 
 CC = cc
 
-CFLAGS = -Werror -Wextra -Wall -g3 -MMD -MP -02
+CFLAGS = -Werror -Wextra -Wall -g3 -MMD -MP
 
 CPPFLAGS = -I$(INCS) -I$(INCS_LIBS)
 
