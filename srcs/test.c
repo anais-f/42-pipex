@@ -68,3 +68,14 @@ printf("Pere : Je suis le pere, le pid de mon fils est %d.\n", pid);
 printf("Pere : Termine !\n");
 }
 --------------------------
+
+
+int	find_outfile(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while(argv[i])
+		i++;
+	return (i - 1);
+}

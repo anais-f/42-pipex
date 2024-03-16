@@ -20,6 +20,7 @@ SRCS_DIR = ./srcs
 
 SRCS =\
 		main.c \
+		utils.c \
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 
@@ -48,7 +49,7 @@ LIBS_TARGET = ./libft/libft.a
 
 CC = cc
 
-CFLAGS = -Werror -Wextra -Wall -g3 -MMD -MP
+CFLAGS = -Werror -Wextra -Wall -g3 -MMD -MP -w
 
 CPPFLAGS = -I$(INCS) -I$(INCS_LIBS)
 
