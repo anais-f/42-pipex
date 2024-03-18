@@ -25,8 +25,7 @@ char	*parse_env(char **envp, char **cmd)
 	{
 		if (ft_strncmp("PATH=", envp[i], 5) == 0)
 		{
-			path_array = ft_split(envp[i], ':');
-			path_array[0] += 5;
+			path_array = ft_split(envp[i] + 5, ':');
 //			while (path_array[j])
 //			{
 //				printf("%s\n", path_array[j]);
@@ -44,7 +43,8 @@ char	*parse_env(char **envp, char **cmd)
 		join_cmd = ft_join_cmd(path_array[i], cmd[0]);
 		i++;
 	}
-	printf("%s\n", join_cmd);
+//	printf("%s\n", join_cmd);
+	free_all(path_array);
 	return(join_cmd);
 }
 
@@ -65,9 +65,17 @@ char *ft_join_cmd(char *s1, char *s2)
 	ft_strlcat(cmd, "/", len_s1 + len_s2 + 2);
 	ft_strlcat(cmd, s2, len_s1 + len_s2 + 2);
 	return (cmd);
-
-//ft_memcpy(cmd, s1, len_s1);
-//ft_memcpy(cmd + len_s1, "/", 1);
-//ft_memcpy(cmd + len_s1 + 1, s2, len_s2);
 }
 
+void	free_all(char **array)
+{
+	size_t	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free (array[i]);
+		i++;
+	}
+	free (array);
+}

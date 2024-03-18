@@ -25,12 +25,14 @@ typedef struct	s_data
 {
 	int infile_fd;
 	int outfile_fd;
+	int pipe_fd[2];
 	char	**path_array;
 }	t_data;
 
 char	*parse_env(char **envp, char **cmd);
 char	*ft_join_cmd(char *s1, char *s2);
 char	*build_cmd_path(char *str);
-
+int child(t_data *data, char *str, char **envp, char **cmd);
+void	free_all(char **array);
 
 #endif
