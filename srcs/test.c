@@ -79,3 +79,28 @@ int	find_outfile(char **argv)
 		i++;
 	return (i - 1);
 }
+
+
+
+
+//char	*build_cmd_path(char *str)
+//{
+//	char	**argv_cmd_array;
+//	//int i = 0;
+//
+//	argv_cmd_array = ft_split(str, ' ');
+////	while (argv_cmd_array[i])
+////	{
+////		printf("%s\n", argv_cmd_array[i]);
+////		i++;
+////	}
+//	return (argv_cmd_array);
+//
+////main
+////	int	i = 2;
+////	while(argv[i] && i < argc - 1) //
+////	{
+////		build_cmd_path(argv[i]);
+////		i++;
+////	}
+//}

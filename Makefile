@@ -21,6 +21,7 @@ SRCS_DIR = ./srcs
 SRCS =\
 		main.c \
 		utils.c \
+		children.c \
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 

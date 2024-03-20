@@ -11,30 +11,21 @@
 /* ************************************************************************** */
 #include "pipex.h"
 
-char	*parse_env(char **envp, char **cmd)
+char	*parse_env_and_path(char **envp, char **cmd)
 {
 	char	**path_array;
 	char *join_cmd;
 	int i;
-	int j;
 
 	i = 0;
-	j = 0;
-
 	while (envp[i])
 	{
 		if (ft_strncmp("PATH=", envp[i], 5) == 0)
 		{
 			path_array = ft_split(envp[i] + 5, ':');
-//			while (path_array[j])
-//			{
-//				printf("%s\n", path_array[j]);
-//				j++;
-//			}
 		}
 		i++;
 	}
-	//printf("join cmd = %s\n", join_cmd);
 	join_cmd = ft_join_cmd(path_array[0], cmd[0]);
 	i = 0;
 	while (access(join_cmd, F_OK) != 0)
@@ -43,9 +34,20 @@ char	*parse_env(char **envp, char **cmd)
 		join_cmd = ft_join_cmd(path_array[i], cmd[0]);
 		i++;
 	}
-//	printf("%s\n", join_cmd);
 	free_all(path_array);
+	printf("cmd = %s\n",join_cmd);
 	return(join_cmd);
+}
+
+char *check_abs_path(char **cmd)
+{
+	char *path_cmd;
+
+	path_cmd = cmd[0];
+	if (access(path_cmd, F_OK) != 0)
+		return (NULL);
+	else
+		return (path_cmd);
 }
 
 char *ft_join_cmd(char *s1, char *s2)
@@ -78,4 +80,16 @@ void	free_all(char **array)
 		i++;
 	}
 	free (array);
+}
+
+int str_bool(char *str, int c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != (char)c)
+		i++;
+	if (str[i] == (char)c)
+		return (1);
+	return (0);
 }

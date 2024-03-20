@@ -20,13 +20,9 @@ int main(int argc, char **argv, char **envp)
 	char **cmd;
 	char *str;
 	int i = 0;
-	pid_t pid;
-
-	if (pipe(data.pipe_fd) == -1)
-	{
-		perror("Pipe");
-		exit (1);
-	}
+	pid_t 	pid_first = 0;
+	pid_t	pid_last = 1;
+	pid_t 	pid_middle;
 
 	data.infile_fd = open(argv[1], O_RDONLY);
 	if (data.infile_fd == -1)
@@ -34,77 +30,65 @@ int main(int argc, char **argv, char **envp)
 		perror ("open infile");
 		exit (1);
 	}
-	data.outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0744);
+	data.outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0766);
 	if (data.outfile_fd == -1)
 	{
 		perror ("open infile");
 		exit (1);
 	}
 
-	cmd = ft_split(argv[2], ' ');
-	str = parse_env(envp, cmd);
 
-	pid = fork();
-	if (pid == - 1)
+	if (pipe(data.pipe_fd) == -1)
+	{
+		perror("Pipe");
+		exit (1);
+	}
+
+	cmd = ft_split(argv[2], ' ');
+	if (str_bool(argv[2], '/') == 0)
+		str = parse_env_and_path(envp, cmd);
+	else
+		str = check_abs_path(cmd);
+	printf("str = %s\n",str);
+
+	pid_first = fork();
+	if (pid_first == - 1)
 	{
 		perror("fork");
 		exit (1);
 	}
-	if (pid == 0)
+	if (pid_first == 0)
 	{
-		child(&data, str, envp, cmd);
+		first_child(&data, str, envp, cmd);
 	}
-	else
-	{
-		wait(NULL);
-		printf("je suis le parent\n");
-	}
-	free(str);
+	//free(str);
 	free_all(cmd);
 
+	cmd = ft_split(argv[3], ' ');
+	if (str_bool(argv[3], '/') == 0)
+		str = parse_env_and_path(envp, cmd);
+	else
+		str = check_abs_path(cmd);
 
+	pid_last = fork();
+	if (pid_last == - 1)
+	{
+		perror("fork");
+		exit (1);
+	}
+	if (pid_last == 0)
+	{
+		last_child(&data, str, envp, cmd);
+	}
+
+	close(data.pipe_fd[1]);
+	close(data.pipe_fd[0]);
+	waitpid(pid_first, NULL, 0);
+	waitpid(pid_last, NULL, 0);
+
+//	free(str);
+	free_all(cmd);
 	return (0);
 }
 
-int child(t_data *data, char *str, char **envp, char **cmd)
-{
-	//close(data->pipe_fd[1]);
-	if (dup2(data->infile_fd, STDIN_FILENO) == -1)
-	{
-		perror("dup2 infile");
-		exit (1);
-	}
-	if (dup2(data->outfile_fd, STDOUT_FILENO) == -1)
-	{
-		perror("dup2 outfile");
-		exit (1);
-	}
-	execve(str, cmd, envp);
-	return (0);
-}
 
-
-
-
-
-//char	*build_cmd_path(char *str)
-//{
-//	char	**argv_cmd_array;
-//	//int i = 0;
-//
-//	argv_cmd_array = ft_split(str, ' ');
-////	while (argv_cmd_array[i])
-////	{
-////		printf("%s\n", argv_cmd_array[i]);
-////		i++;
-////	}
-//	return (argv_cmd_array);
-//
-////main
-////	int	i = 2;
-////	while(argv[i] && i < argc - 1) //
-////	{
-////		build_cmd_path(argv[i]);
-////		i++;
-////	}
-//}
