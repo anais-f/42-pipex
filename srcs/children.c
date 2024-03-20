@@ -11,9 +11,19 @@
 /* ************************************************************************** */
 #include "pipex.h"
 
+int create_child(t_data *data, char ** argv, int argc, char **envp)
+{
+	if (data->i == 2)
+		first_child(data, data->str_path, envp, data->cmd);
+	if (data->i == 3)
+		last_child(data, data->str_path, envp, data->cmd);
+}
+
 int first_child(t_data *data, char *str, char **envp, char **cmd)
 {
 	close(data->pipe_fd[0]);
+	close(data->outfile_fd);
+	printf("cmd first child = %s\n", str);
 	if (dup2(data->infile_fd, STDIN_FILENO) == -1)
 	{
 		perror("first dup2 infile");
@@ -26,46 +36,54 @@ int first_child(t_data *data, char *str, char **envp, char **cmd)
 		exit (1);
 	}
 	close(data->pipe_fd[1]);
+	dprintf(2, "cmd : %s %s\n", cmd[0], cmd[1] );
 	execve(str, cmd, envp);
-	return (0);
+	perror("execve first");
+	exit (1);
 }
 
 
 int last_child(t_data *data, char *str, char **envp, char **cmd)
 {
+	printf("reception 2eme enfant = %d\n", data->pipe_fd[0]);
+	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
-	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
+	close(data->infile_fd);
+	printf("cmd last child = %s\n", str);
+	if (dup2(data->temp_fd_in, STDIN_FILENO) == -1)
 	{
 		perror("last dup2 infile");
 		exit (1);
 	}
-	close(data->pipe_fd[0]);
+	close(data->temp_fd_in);
 	if (dup2(data->outfile_fd, STDOUT_FILENO) == -1)
 	{
 		perror("last dup2 outfile");
 		exit (1);
 	}
 	close(data->outfile_fd);
+	dprintf(2, "cmd : %s %s\n", cmd[0], cmd[1] );
 	execve(str, cmd, envp);
-	return (0);
+	perror("execve last");
+	exit (1);
 }
 
-
-int middle_child(t_data *data, char *str, char **envp, char **cmd)
-{
-	if (dup2(data->temp_pipe_fd, data->pipe_fd[0]) == -1)
-	{
-		perror("dup2");
-		exit (1);
-	}
-	close(data->pipe_fd[0]);
-	close(data->temp_pipe_fd);
-	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
-	{
-		perror("dup2");
-		exit (1);
-	}
-	close(data->pipe_fd[1]);
-	execve(str, cmd, envp);
-	return (0);
-}
+//
+//int middle_child(t_data *data, char *str, char **envp, char **cmd)
+//{
+//	close(data->pipe_fd[0]);
+//	if (dup2(data->temp_pipe_fd, STDIN_FILENO) == -1)
+//	{
+//		perror("dup2");
+//		exit (1);
+//	}
+//	close(data->temp_pipe_fd);
+//	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
+//	{
+//		perror("dup2");
+//		exit (1);
+//	}
+//	close(data->pipe_fd[1]);
+//	execve(str, cmd, envp);
+//	return (0);
+//}

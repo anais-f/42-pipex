@@ -13,82 +13,68 @@
 
 int main(int argc, char **argv, char **envp)
 {
-	(void)argv;
-	(void)argc;
-
 	t_data	data;
-	char **cmd;
-	char *str;
-	int i = 0;
-	pid_t 	pid_first = 0;
-	pid_t	pid_last = 1;
-	pid_t 	pid_middle;
 
-	data.infile_fd = open(argv[1], O_RDONLY);
-	if (data.infile_fd == -1)
+	if (argc != 5)
 	{
-		perror ("open infile");
-		exit (1);
+		ft_printf("Error with invalid parameters\n");
+		return (-1);
 	}
-	data.outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0766);
-	if (data.outfile_fd == -1)
+	init_var(&data, argc, argv);
+	while (data.i < argc - 1)
 	{
-		perror ("open infile");
-		exit (1);
+		if (pipe(data.pipe_fd) == -1)
+		{
+			perror("Pipe");
+			exit (1);
+		}
+		data.cmd = ft_split(argv[data.i], ' ');
+		if (str_bool(argv[data.i], '/') == 0)
+			data.str_path = parse_env_and_path(envp, data.cmd);
+		else
+			data.str_path = check_abs_path(data.cmd);
+
+		data.pid = fork();
+		if (data.pid == - 1)
+		{
+			perror("fork");
+			exit (1);
+		}
+		if (data.pid == 0)
+			create_child(&data, argv, argc, envp);
+		if (data.pid > 0)
+			printf("pid parent = %d\n", data.pid);
+		data.i++;
+		if (data.i > 3)
+			close(data.temp_fd_in);
+		data.temp_fd_in = data.pipe_fd[0];
+	//	close(data.pipe_fd[0]);
+		close(data.pipe_fd[1]);
 	}
-
-
-	if (pipe(data.pipe_fd) == -1)
-	{
-		perror("Pipe");
-		exit (1);
-	}
-
-	cmd = ft_split(argv[2], ' ');
-	if (str_bool(argv[2], '/') == 0)
-		str = parse_env_and_path(envp, cmd);
-	else
-		str = check_abs_path(cmd);
-	printf("str = %s\n",str);
-
-	pid_first = fork();
-	if (pid_first == - 1)
-	{
-		perror("fork");
-		exit (1);
-	}
-	if (pid_first == 0)
-	{
-		first_child(&data, str, envp, cmd);
-	}
-	//free(str);
-	free_all(cmd);
-
-	cmd = ft_split(argv[3], ' ');
-	if (str_bool(argv[3], '/') == 0)
-		str = parse_env_and_path(envp, cmd);
-	else
-		str = check_abs_path(cmd);
-
-	pid_last = fork();
-	if (pid_last == - 1)
-	{
-		perror("fork");
-		exit (1);
-	}
-	if (pid_last == 0)
-	{
-		last_child(&data, str, envp, cmd);
-	}
-
-	close(data.pipe_fd[1]);
+	close(data.temp_fd_in);
 	close(data.pipe_fd[0]);
-	waitpid(pid_first, NULL, 0);
-	waitpid(pid_last, NULL, 0);
-
-//	free(str);
-	free_all(cmd);
+	close(data.infile_fd);
+	close(data.outfile_fd);
+	while (waitpid(-1, NULL, 0) > 0)
+		;
+	free(data.str_path);
+	free_all(data.cmd);
 	return (0);
 }
 
-
+void	init_var(t_data *data, int argc, char **argv)
+{
+	data->infile_fd = open(argv[1], O_RDONLY);
+	if (data->infile_fd == -1)
+	{
+		perror ("open infile");
+		exit (1);
+	}
+	data->outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0766);
+	if (data->outfile_fd == -1)
+	{
+		perror ("open infile");
+		exit (1);
+	}
+	data->i = 2;
+}

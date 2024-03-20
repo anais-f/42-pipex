@@ -14,8 +14,8 @@
 char	*parse_env_and_path(char **envp, char **cmd)
 {
 	char	**path_array;
-	char *join_cmd;
-	int i;
+	char	*join_cmd;
+	int		i;
 
 	i = 0;
 	while (envp[i])
@@ -35,7 +35,7 @@ char	*parse_env_and_path(char **envp, char **cmd)
 		i++;
 	}
 	free_all(path_array);
-	printf("cmd = %s\n",join_cmd);
+	//printf("cmd = %s\n",join_cmd);
 	return(join_cmd);
 }
 
@@ -43,7 +43,7 @@ char *check_abs_path(char **cmd)
 {
 	char *path_cmd;
 
-	path_cmd = cmd[0];
+	path_cmd = ft_strdup(cmd[0]);
 	if (access(path_cmd, F_OK) != 0)
 		return (NULL);
 	else
