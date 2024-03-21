@@ -26,7 +26,6 @@ typedef struct	s_data
 	int 	infile_fd;
 	int 	outfile_fd;
 	int 	pipe_fd[2];
-	char	**path_array;
 	int		temp_fd_in;
 	int 	i;
 	pid_t	pid;
@@ -39,7 +38,7 @@ char	*parse_env_and_path(char **envp, char **cmd);
 char	*ft_join_cmd(char *s1, char *s2);
 char 	*check_abs_path(char **cmd);
 char	*build_cmd_path(char *str);
-void	free_all(char **array);
+void	free_all(char **array, char *ptr);
 int 	first_child(t_data *data, char *str, char **envp, char **cmd);
 int 	last_child(t_data *data, char *str, char **envp, char **cmd);
 int 	middle_child(t_data *data, char *str, char **envp, char **cmd);

@@ -17,6 +17,7 @@ char	*parse_env_and_path(char **envp, char **cmd)
 	char	*join_cmd;
 	int		i;
 
+	path_array = NULL;
 	i = 0;
 	while (envp[i])
 	{
@@ -26,6 +27,8 @@ char	*parse_env_and_path(char **envp, char **cmd)
 		}
 		i++;
 	}
+	if (!path_array)
+		return (NULL);
 	join_cmd = ft_join_cmd(path_array[0], cmd[0]);
 	i = 0;
 	while (access(join_cmd, F_OK) != 0)
@@ -34,7 +37,7 @@ char	*parse_env_and_path(char **envp, char **cmd)
 		join_cmd = ft_join_cmd(path_array[i], cmd[0]);
 		i++;
 	}
-	free_all(path_array);
+	free_all(path_array, NULL);
 	//printf("cmd = %s\n",join_cmd);
 	return(join_cmd);
 }
@@ -58,8 +61,8 @@ char *ft_join_cmd(char *s1, char *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
+	len_s1 = ft_protect_strlen(s1);
+	len_s2 = ft_protect_strlen(s2);
 	cmd = malloc(sizeof(char) * (len_s1 + len_s2 + 2));
 	if (!cmd)
 		return (NULL);
@@ -69,17 +72,22 @@ char *ft_join_cmd(char *s1, char *s2)
 	return (cmd);
 }
 
-void	free_all(char **array)
+void	free_all(char **array, char *ptr)
 {
 	size_t	i;
 
 	i = 0;
-	while (array[i])
+	if (array)
 	{
-		free (array[i]);
-		i++;
+		while (array[i])
+		{
+			free (array[i]);
+			i++;
+		}
+		free (array);
 	}
-	free (array);
+	if (ptr)
+		free(ptr);
 }
 
 int str_bool(char *str, int c)

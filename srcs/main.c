@@ -42,14 +42,15 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (data.pid == 0)
 			create_child(&data, argv, argc, envp);
-		if (data.pid > 0)
-			printf("pid parent = %d\n", data.pid);
 		data.i++;
-		if (data.i > 3)
-			close(data.temp_fd_in);
 		data.temp_fd_in = data.pipe_fd[0];
-	//	close(data.pipe_fd[0]);
+		if (data.i > 3)
+		{
+			close(data.temp_fd_in);
+		}
 		close(data.pipe_fd[1]);
+		close(data.pipe_fd[0]);
+		free_all(data.cmd, data.str_path);
 	}
 	close(data.temp_fd_in);
 	close(data.pipe_fd[0]);
@@ -57,8 +58,8 @@ int main(int argc, char **argv, char **envp)
 	close(data.outfile_fd);
 	while (waitpid(-1, NULL, 0) > 0)
 		;
-	free(data.str_path);
-	free_all(data.cmd);
+	//free(data.str_path);
+//	free_all(data.cmd, data.str_path);
 	return (0);
 }
 
@@ -77,4 +78,5 @@ void	init_var(t_data *data, int argc, char **argv)
 		exit (1);
 	}
 	data->i = 2;
+	data->cmd = NULL;
 }
