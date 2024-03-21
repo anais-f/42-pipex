@@ -50,7 +50,7 @@ LIBS_TARGET = ./libft/libft.a
 
 CC = cc
 
-CFLAGS = -Werror -Wextra -Wall -g3 -MMD -MP -w
+CFLAGS = -Werror -Wextra -Wall -g3 -MMD -MP
 
 CPPFLAGS = -I$(INCS) -I$(INCS_LIBS)
 

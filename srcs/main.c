@@ -25,7 +25,6 @@ int main(int argc, char **argv, char **envp)
 	{
 		if (pipe_and_path(&data, argv, envp) == -1)
 		{
-			//free_all(data.cmd, NULL);
 			return (-1);
 		}
 		data.pid = fork();
@@ -74,7 +73,14 @@ int	pipe_and_path(t_data *data, char **argv, char **envp)
 		}
 	}
 	else
+	{
 		data->str_path = check_abs_path(data->cmd);
+		if (data->str_path == NULL)
+		{
+			free_all(data->cmd, NULL);
+			return (-1);
+		}
+	}
 	return (0);
 }
 
@@ -86,7 +92,7 @@ void	init_var(t_data *data, int argc, char **argv)
 		perror ("Open infile");
 		exit (1);
 	}
-	data->outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0766);
+	data->outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (data->outfile_fd == -1)
 	{
 		perror ("Open outfile");

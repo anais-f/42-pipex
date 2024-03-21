@@ -39,7 +39,7 @@ char	*parse_env_and_path(char **envp, char **cmd)
 			return (NULL);
 		if (access(join_cmd, F_OK) == 0)
 		{
-			printf("cmd = %s \n", join_cmd);
+			//printf("cmd = %s \n", join_cmd);
 			break;
 		}
 		i++;
@@ -51,8 +51,6 @@ char	*parse_env_and_path(char **envp, char **cmd)
 		free_all(path_array, NULL);
 		return (NULL);
 	}
-//	if (path_array == NULL)
-//		return (NULL);
 	free_all(path_array, NULL);
 	return(join_cmd);
 }
@@ -60,10 +58,24 @@ char	*parse_env_and_path(char **envp, char **cmd)
 char *check_abs_path(char **cmd)
 {
 	char *path_cmd;
+//	size_t i;
 
 	path_cmd = ft_strdup(cmd[0]);
-	if (access(path_cmd, F_OK) != 0)
+	if (path_cmd == NULL)
 		return (NULL);
+//	i = ft_protect_strlen(path_cmd);
+//	if (path_cmd[i] == '/')
+//	{
+//		dprintf(2, "%s: command not found\n", cmd[0]);
+//		free_all(NULL, path_cmd);
+//		return (NULL);
+//	}
+	if (access(path_cmd, F_OK) != 0)
+	{
+		dprintf(2, "%s: command not found\n", cmd[0]);
+		free_all(NULL, path_cmd);
+		return (NULL);
+	}
 	else
 		return (path_cmd);
 }
