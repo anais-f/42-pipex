@@ -26,12 +26,13 @@ on env -i ./pipex infile.txt "/bin/ls -l" "wc -l" outfile.txt
 
 
 ### TO DO
-gestion des droits sur infile et outfile
-faire la commande suivante si la 1ere echoue
+faire la commande suivante si la 1ere echoue -> a priori mais ne se redirige pas
+voir ./pipex infile.txt "ls -l" "wc -l" outfile.txt le msg d'erreur ?!!
 hardcode de create children pour les bonus
 refaire des test (possible leaks)
 sleep a voir
 
+gestion des droits sur infile et outfile et executable (command) OK
 path inexistant -> leaks + error OK
 message erreur quand les commandes ne sont pas trouves (pas de path) OK
 commande inexistante -> message erreur + leaks OK

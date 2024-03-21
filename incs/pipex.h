@@ -44,5 +44,6 @@ int 	str_bool(char *str, int c);
 void	init_var(t_data *data, int argc, char **argv);
 int		create_child(t_data *data, char ** argv, int argc, char **envp);
 int	pipe_and_path(t_data *data, char **argv, char **envp);
+int check_access_files(t_data *data, char *infile, char *outfile);
 
 #endif

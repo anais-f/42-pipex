@@ -21,6 +21,7 @@ int main(int argc, char **argv, char **envp)
 		return (-1);
 	}
 	init_var(&data, argc, argv);
+	check_access_files(&data, argv[1], argv[argc - 1]);
 	while (data.i < argc - 1)
 	{
 		if (pipe_and_path(&data, argv, envp) == -1)

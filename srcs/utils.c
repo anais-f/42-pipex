@@ -37,7 +37,7 @@ char	*parse_env_and_path(char **envp, char **cmd)
 		join_cmd = ft_join_cmd(path_array[i], cmd[0]);
 		if (join_cmd == NULL)
 			return (NULL);
-		if (access(join_cmd, F_OK) == 0)
+		if (access(join_cmd, F_OK | X_OK) == 0)
 		{
 			//printf("cmd = %s \n", join_cmd);
 			break;
@@ -58,21 +58,21 @@ char	*parse_env_and_path(char **envp, char **cmd)
 char *check_abs_path(char **cmd)
 {
 	char *path_cmd;
-//	size_t i;
+	size_t i;
 
 	path_cmd = ft_strdup(cmd[0]);
 	if (path_cmd == NULL)
 		return (NULL);
-//	i = ft_protect_strlen(path_cmd);
-//	if (path_cmd[i] == '/')
-//	{
-//		dprintf(2, "%s: command not found\n", cmd[0]);
-//		free_all(NULL, path_cmd);
-//		return (NULL);
-//	}
-	if (access(path_cmd, F_OK) != 0)
+	i = ft_protect_strlen(path_cmd);
+	if (path_cmd[i - 1] == '/')
 	{
-		dprintf(2, "%s: command not found\n", cmd[0]);
+		dprintf(2, "%s: command not found or exec not executable\n", cmd[0]);
+		free_all(NULL, path_cmd);
+		return (NULL);
+	}
+	if (access(path_cmd, F_OK | X_OK) != 0)
+	{
+		dprintf(2, "%s: command / or exect not found\n", cmd[0]);
 		free_all(NULL, path_cmd);
 		return (NULL);
 	}
@@ -126,5 +126,21 @@ int str_bool(char *str, int c)
 		i++;
 	if (str[i] == (char)c)
 		return (1);
+	return (0);
+}
+
+int check_access_files(t_data *data, char *infile, char *outfile)
+{
+	(void)data;
+	if (access(infile, F_OK | R_OK) != 0)
+	{
+		perror(infile);
+		return (-1);
+	}
+	if (access(outfile, F_OK | W_OK) != 0)
+	{
+		perror(outfile);
+		return (-1);
+	}
 	return (0);
 }
