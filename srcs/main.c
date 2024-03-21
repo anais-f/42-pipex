@@ -33,7 +33,6 @@ int main(int argc, char **argv, char **envp)
 			data.str_path = parse_env_and_path(envp, data.cmd);
 		else
 			data.str_path = check_abs_path(data.cmd);
-
 		data.pid = fork();
 		if (data.pid == - 1)
 		{
@@ -43,23 +42,16 @@ int main(int argc, char **argv, char **envp)
 		if (data.pid == 0)
 			create_child(&data, argv, argc, envp);
 		data.i++;
-		data.temp_fd_in = data.pipe_fd[0];
-		if (data.i > 3)
-		{
-			close(data.temp_fd_in);
-		}
-		close(data.pipe_fd[1]);
+		dup2(data.pipe_fd[0], data.temp_fd_in);
 		close(data.pipe_fd[0]);
+		close(data.pipe_fd[1]);
 		free_all(data.cmd, data.str_path);
 	}
-	close(data.temp_fd_in);
-	close(data.pipe_fd[0]);
 	close(data.infile_fd);
 	close(data.outfile_fd);
+	close(data.temp_fd_in);
 	while (waitpid(-1, NULL, 0) > 0)
 		;
-	//free(data.str_path);
-//	free_all(data.cmd, data.str_path);
 	return (0);
 }
 
@@ -79,4 +71,5 @@ void	init_var(t_data *data, int argc, char **argv)
 	}
 	data->i = 2;
 	data->cmd = NULL;
+	data->temp_fd_in = 0;
 }
