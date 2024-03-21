@@ -37,13 +37,12 @@ typedef struct	s_data
 char	*parse_env_and_path(char **envp, char **cmd);
 char	*ft_join_cmd(char *s1, char *s2);
 char 	*check_abs_path(char **cmd);
-char	*build_cmd_path(char *str);
 void	free_all(char **array, char *ptr);
 int 	first_child(t_data *data, char *str, char **envp, char **cmd);
 int 	last_child(t_data *data, char *str, char **envp, char **cmd);
-int 	middle_child(t_data *data, char *str, char **envp, char **cmd);
 int 	str_bool(char *str, int c);
 void	init_var(t_data *data, int argc, char **argv);
-int create_child(t_data *data, char ** argv, int argc, char **envp);
+int		create_child(t_data *data, char ** argv, int argc, char **envp);
+int	pipe_and_path(t_data *data, char **argv, char **envp);
 
 #endif

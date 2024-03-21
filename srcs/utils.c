@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:02:27 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/16 13:02:27 by anfichet         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:13:25 by anfichet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
@@ -18,6 +18,7 @@ char	*parse_env_and_path(char **envp, char **cmd)
 	int		i;
 
 	path_array = NULL;
+	join_cmd = NULL;
 	i = 0;
 	while (envp[i])
 	{
@@ -29,16 +30,30 @@ char	*parse_env_and_path(char **envp, char **cmd)
 	}
 	if (!path_array)
 		return (NULL);
-	join_cmd = ft_join_cmd(path_array[0], cmd[0]);
 	i = 0;
-	while (access(join_cmd, F_OK) != 0)
+	while (path_array[i])
 	{
 		free(join_cmd);
 		join_cmd = ft_join_cmd(path_array[i], cmd[0]);
+		if (join_cmd == NULL)
+			return (NULL);
+		if (access(join_cmd, F_OK) == 0)
+		{
+			printf("cmd = %s \n", join_cmd);
+			break;
+		}
 		i++;
 	}
+	if (path_array[i] == NULL)
+	{
+		free(join_cmd);
+		dprintf(2, "%s: command not found\n", cmd[0]);
+		free_all(path_array, NULL);
+		return (NULL);
+	}
+//	if (path_array == NULL)
+//		return (NULL);
 	free_all(path_array, NULL);
-	//printf("cmd = %s\n",join_cmd);
 	return(join_cmd);
 }
 
