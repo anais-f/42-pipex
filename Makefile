@@ -6,7 +6,7 @@
 #    By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 18:25:46 by anfichet          #+#    #+#              #
-#    Updated: 2024/03/12 10:50:25 by anfichet         ###   ########.fr        #
+#    Updated: 2024/03/23 17:40:37 by anfichet         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRCS =\
 		main.c \
 		utils.c \
 		children.c \
+		parsing.c \
 
 SRCS := $(SRCS:%=$(SRCS_DIR)/%)
 

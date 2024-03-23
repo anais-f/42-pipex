@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 19:11:57 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/12 19:11:57 by anfichet         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:45:36 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,23 @@ typedef struct	s_data
 
 }	t_data;
 
+
+
+//CHILDREN
+int last_child(t_data *data, char *str, char **envp, char **cmd);
+int first_child(t_data *data, char *str, char **envp, char **cmd);
+int create_child(t_data *data, char ** argv, int argc, char **envp);
+
+//PARSING
 char	*parse_env_and_path(char **envp, char **cmd);
-char	*ft_join_cmd(char *s1, char *s2);
-char 	*check_abs_path(char **cmd);
+char *check_join_path(char **array, t_data *data, char **envp);
+char	*check_abs_path(char **cmd);
+void	find_path_cmd(t_data *data, char **argv, char **envp);
+
+//UTILS
+int		bool_search_cmd(char *str, int c);
 void	free_all(char **array, char *ptr);
-int 	first_child(t_data *data, char *str, char **envp, char **cmd);
-int 	last_child(t_data *data, char *str, char **envp, char **cmd);
-int 	str_bool(char *str, int c);
-void	init_var(t_data *data, int argc, char **argv);
-int		create_child(t_data *data, char ** argv, int argc, char **envp);
-int	pipe_and_path(t_data *data, char **argv, char **envp);
-int check_access_files(t_data *data, char *infile, char *outfile);
+char	*ft_join_cmd(char *s1, char *s2);
+void	init_and_open_var(t_data *data, int argc, char **argv);
 
 #endif

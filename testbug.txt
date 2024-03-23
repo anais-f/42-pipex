@@ -1,38 +1,60 @@
 pipex
 
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile cat cat outfile.txt  
+-> OK
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "grep libft.a" "cat" outfile.txt
+-> ok
+
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "ls -l" outfile.txt
+-> ok - leak de ls
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "ls -l" "wc -l" outfile.txt
+-> ok - leaks des commandes
+
+env -i valgrind --leak-check=full --show-leak-kinds=all ./pipex infile.txt "/bin/ls -l" "wc -l" outfile.txt
+- > ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "gcat" "cat" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "cfat" outfile.txt
+-> ok - leak des commandes
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "/usr/bin/cat" "cat" outfile.txt
+-> full OK
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "/usrbin/cat" "cat" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "ls -l" outfile.txt
+-> leaks
+
+
 On UNSET PATH
 
-/bin/valgrind --track-fds=yes --trace-children=yes ./pipex /dev/urandom "cat" "head -10" out.
+/bin/valgrind --track-fds=yes --trace-children=yes ./pipex /dev/urandom "cat" "head -10" outfile.txt
 
--> Segfault
-==155796== Process terminating with default action of signal 11 (SIGSEGV)
-==155796==  Access not within mapped region at address 0x60
-==155796==    at 0x109E1A: ft_strlen (ft_strlen.c:20)
-==155796==    by 0x10979D: ft_join_cmd (utils.c:61)
-==155796==    by 0x1096F1: parse_env_and_path (utils.c:34)
-==155796==    by 0x109417: main (main.c:33)
 
 -> Open fds
 
 -> Leaks
 
-on env -i ./pipex infile.txt "/bin/ls -l" "wc -l" outfile.txt
--> Segfault
-==156034==    at 0x109E1A: ft_strlen (ft_strlen.c:20)
-==156034==    by 0x10979D: ft_join_cmd (utils.c:61)
-==156034==    by 0x1096F1: parse_env_and_path (utils.c:34)
-==156034==    by 0x109417: main (main.c:33)
+
 
 
 
 ### TO DO
-faire la commande suivante si la 1ere echoue -> a priori mais ne se redirige pas
-voir ./pipex infile.txt "ls -l" "wc -l" outfile.txt le msg d'erreur ?!!
-hardcode de create children pour les bonus
-refaire des test (possible leaks)
+faire la commande suivante si une echoue
 sleep a voir
 
-gestion des droits sur infile et outfile et executable (command) OK
-path inexistant -> leaks + error OK
-message erreur quand les commandes ne sont pas trouves (pas de path) OK
-commande inexistante -> message erreur + leaks OK
+gestion des droits sur infile et outfile et executable (command)
+path inexistant
+message erreur quand les commandes ne sont pas trouves (pas de path)
+commande inexistante
+
+./pipex Makefile "cat" "" outfile.txt
+./pipex Makefile "" "" outfile.txt
+./pipex Makefile "" "ls -l" outfile.txt
