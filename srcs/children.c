@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 15:12:03 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/23 19:49:53 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/25 13:59:50 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int create_child(t_data *data, char ** argv, int argc, char **envp)
 
 int first_child(t_data *data, char *str, char **envp, char **cmd)
 {
-	printf("je suis le first child %d\n",(int)getpid());
+	printf("first child %d\n",(int)getpid());
 	
 	if (dup2(data->infile_fd, STDIN_FILENO) == -1)
 	{
@@ -61,7 +61,7 @@ int first_child(t_data *data, char *str, char **envp, char **cmd)
 
 int last_child(t_data *data, char *str, char **envp, char **cmd)
 {
-	printf("je suis le last child %d\n",(int)getpid());
+	printf("last child %d\n",(int)getpid());
 	
 	if (dup2(data->temp_fd_in, STDIN_FILENO) == -1)
 	{

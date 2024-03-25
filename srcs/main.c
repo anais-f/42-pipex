@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 12:50:40 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/23 19:28:02 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/25 14:07:45 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,28 +76,28 @@ void	find_path_cmd(t_data *data, char **argv, char **envp)
 	}
 	if (data->cmd[0] == 0)
 	{
-		free_all(data->cmd, NULL);
-		dprintf(2, "Command '' : command not found\n");
+		//free_all(data->cmd, NULL);
+		dprintf(2, "Command '' not found\n");
 		data->str_path = NULL;
 	}
 	else if (bool_search_cmd(data->cmd[0], '/') == 0)
 	{
 		data->str_path = parse_env_and_path(envp, data->cmd);
-		if (data->str_path == NULL)
-		{
-			// close(data->pipe_fd[0]);
-			// close(data->pipe_fd[1]);
-			//free_all(data->cmd, NULL);
-		}
+		// if (data->str_path == NULL)
+		// {
+		// 	// close(data->pipe_fd[0]);
+		// 	// close(data->pipe_fd[1]);
+		// 	//free_all(data->cmd, NULL);
+		// }
 	}
 	else
 	{
 		data->str_path = check_abs_path(data->cmd);
-		if (data->str_path == NULL)
-		{
-			// close(data->pipe_fd[0]);
-			// close(data->pipe_fd[1]);
-		//	free_all(data->cmd, NULL);
-		}
+		// if (data->str_path == NULL)
+		// {
+		// 	// close(data->pipe_fd[0]);
+		// 	// close(data->pipe_fd[1]);
+		// //	free_all(data->cmd, NULL);
+		// }
 	}
 }

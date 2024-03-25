@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/23 15:24:41 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/23 19:33:39 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/25 13:26:33 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,14 @@ char	*parse_env_and_path(char **envp, char **cmd)
 	if (path_array && path_array[i] == NULL)
 	{
 		free(join_cmd);
-		dprintf(2, "%s: command parse not found\n", cmd[0]);
+		dprintf(2, "command not found : %s\n", cmd[0]);
 		free_all(path_array, NULL);
 		join_cmd = NULL;
 		//printf("cmd after parse = %s \n", join_cmd);
 		return (NULL);
 	}
+	if (access(join_cmd, F_OK | X_OK | R_OK) == -1)
+		dprintf(2, "command not found : %s\n", cmd[0]);
 	free_all(path_array, NULL);
 	return(join_cmd);
 }
@@ -76,7 +78,7 @@ char	*check_abs_path(char **cmd)
 	// }
 	if (access(path_cmd, F_OK | X_OK | R_OK) != 0)
 	{
-		dprintf(2, "%s: command / or exect not found\n", cmd[0]);
+		dprintf(2, "command not found : %s\n", cmd[0]);
 		free_all(NULL, path_cmd);
 		path_cmd = NULL;
 		//return (NULL);

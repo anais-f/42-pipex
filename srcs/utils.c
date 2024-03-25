@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:02:27 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/23 19:11:37 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/25 14:41:50 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	init_and_open_var(t_data *data, int argc, char **argv)
 	if (data->infile_fd == -1)
 	{
 		perror (argv[1]);
-		exit (1);
+		data->infile_fd = open("/dev/null", O_RDONLY);
+	//	exit (1);
 	}
 	data->outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (data->outfile_fd == -1)
