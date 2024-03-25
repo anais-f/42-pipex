@@ -6,17 +6,17 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:02:27 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/25 14:41:50 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/25 18:24:30 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char *ft_join_cmd(char *s1, char *s2)
+char	*ft_join_cmd(char *s1, char *s2)
 {
 	char	*cmd;
-	size_t len_s1;
-	size_t len_s2;
+	size_t	len_s1;
+	size_t	len_s2;
 
 	if (!s1 || !s2)
 		return (NULL);
@@ -38,7 +38,6 @@ void	init_and_open_var(t_data *data, int argc, char **argv)
 	{
 		perror (argv[1]);
 		data->infile_fd = open("/dev/null", O_RDONLY);
-	//	exit (1);
 	}
 	data->outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (data->outfile_fd == -1)
@@ -71,7 +70,7 @@ void	free_all(char **array, char *ptr)
 		free(ptr);
 }
 
-int bool_search_cmd(char *str, int c)
+int	bool_search_cmd(char *str, int c)
 {
 	int	i;
 
@@ -83,32 +82,10 @@ int bool_search_cmd(char *str, int c)
 	return (0);
 }
 
-int	ft_close(t_data *data)
+void	ft_close_child(t_data *data)
 {
-	if (close(data->infile_fd) == -1)
-	{
-		dprintf(2, "error close infile");
-		return (-1);
-	}
-	if (close(data->outfile_fd) == -1)
-	{
-		dprintf(2, "error close outfile");
-		return (-1);
-	}
-	if (close(data->temp_fd_in) == -1)
-	{
-		dprintf(2, "error close temp fd in");
-		return (-1);
-	}
-	if (close(data->pipe_fd[0]) == -1)
-	{
-		dprintf(2, "error close pipe[0]");
-		return (-1);
-	}
-	if (close(data->pipe_fd[1]) == -1)
-	{
-		dprintf(2, "error close pipe[1]");
-		return (-1);
-	}
-	return (0);
+	close(data->infile_fd);
+	close(data->outfile_fd);
+	close(data->pipe_fd[0]);
+	close(data->pipe_fd[1]);
 }
