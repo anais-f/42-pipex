@@ -37,3 +37,19 @@ valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kind
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus 00.txt "" "" "ls -l" outfile.txt
 -> ok
+
+
+/usr/bin/valgrind --trace-children=yes --leak-check=full --track-fds=yes --show-leak-kinds=all ./pipex_bonus ofrkdhje ojtre /dor /kod /ejd 3oej o
+-> ok
+
+/usr/bin/valgrind --trace-children=yes --leak-check=full --track-fds=yes --show-leak-kinds=all ./pipex_bonus "" "" "" "" "" "" "" ""
+-> ok (pipe pas close dans le last child)
+syscall close ?
+
+/usr/bin/valgrind --trace-children=yes --leak-check=full --track-fds=yes --show-leak-kinds=all ./pipex_bonus "" "/" "/" "/" "/" "/" "/" ""
+-> ok (pipe pas close dans le last child)
+syscall close ?
+
+/usr/bin/valgrind --trace-children=yes --leak-check=full --track-fds=yes --show-leak-kinds=all ./pipex_bonus Makefile cat cat cat ""
+->ok (leakks et close)
+

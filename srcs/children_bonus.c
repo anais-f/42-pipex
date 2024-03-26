@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 15:12:03 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/26 12:09:44 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/26 16:14:53 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,25 @@ int	create_child(t_data *data, char **argv, int argc, char **envp)
 
 int	first_child(t_data *data, char *str, char **envp, char **cmd)
 {
-	//printf("first child %d\n",(int)getpid());
+	if (data->infile_fd == -1)
+	{
+		data->infile_fd = open("/dev/null", O_RDONLY);
+		error_with_file(data, str, cmd);
+		exit (1);
+	}
 	if (dup2(data->infile_fd, STDIN_FILENO) == -1)
 	{
-		perror("First dup2 infile");
+		perror("First child dup2 infile");
 		exit (1);
 	}
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
 	{
-		perror("First dup2 outfile");
+		perror("First child dup2 outfile");
 		exit (1);
 	}
 	ft_close_child(data);
 	if (str == NULL)
-	{
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		free_all(cmd, str);
-		exit (1);
-	}
+		close_str_null(str, cmd);
 	execve(str, cmd, envp);
 	perror("Execve first : ");
 	close(STDIN_FILENO);
@@ -54,25 +54,19 @@ int	first_child(t_data *data, char *str, char **envp, char **cmd)
 
 int	middle_child(t_data *data, char *str, char **envp, char **cmd)
 {
-	//printf("middle child %d\n",(int)getpid());
 	if (dup2(data->temp_fd_in, STDIN_FILENO) == -1)
 	{
-		perror("Middle dup2 infile");
+		perror("Middle child dup2 infile");
 		exit (1);
 	}
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
 	{
-		perror("Middle dup2 outfile");
+		perror("Middle child dup2 outfile");
 		exit (1);
 	}
 	ft_close_child(data);
 	if (str == NULL)
-	{
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		free_all(cmd, str);
-		exit (1);
-	}
+		close_str_null(str, cmd);
 	execve(str, cmd, envp);
 	perror("Execve middle : ");
 	close(STDIN_FILENO);
@@ -82,28 +76,35 @@ int	middle_child(t_data *data, char *str, char **envp, char **cmd)
 
 int	last_child(t_data *data, char *str, char **envp, char **cmd)
 {
-	//printf("last child %d\n",(int)getpid());
 	if (dup2(data->temp_fd_in, STDIN_FILENO) == -1)
 	{
-		perror("Last dup2 infile");
+		perror("Last child dup2 infile");
+		exit (1);
+	}
+	if (data->outfile_fd == -1)
+	{
+		error_with_file(data, str, cmd);
 		exit (1);
 	}
 	if (dup2(data->outfile_fd, STDOUT_FILENO) == -1)
 	{
-		perror("Last dup2 outfile");
+		perror("Last child dup2 outfile");
 		exit (1);
 	}
 	ft_close_child(data);
 	if (str == NULL)
-	{
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		free_all(cmd, str);
-		exit (1);
-	}
+		close_str_null(str, cmd);
 	execve(str, cmd, envp);
 	perror("Execve last : ");
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
+	exit (1);
+}
+
+void	close_str_null(char *str, char **cmd)
+{
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	free_all(cmd, str);
 	exit (1);
 }

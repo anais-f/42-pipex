@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 19:11:57 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/26 12:08:21 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/26 16:06:21 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,8 @@ void	ft_close_child(t_data *data);
 int		last_child(t_data *data, char *str, char **envp, char **cmd);
 int		first_child(t_data *data, char *str, char **envp, char **cmd);
 int		create_child(t_data *data, char **argv, int argc, char **envp);
+void	error_with_file(t_data *data, char *str, char **cmd);
+void	close_parent(t_data *data);
+void	close_str_null(char *str, char **cmd);
 
 #endif
