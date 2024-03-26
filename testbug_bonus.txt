@@ -1,0 +1,39 @@
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile cat cat cat outfile.txt  
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "grep libft.a" "cat" cat outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "cat" "ls -l" "wc -l" outfile.txt
+-> ok
+
+env -i valgrind --leak-check=full --leak-check=full --show-leak-kinds=all ./pipex_bonus infile.txt "cat" "/bin/ls -l" "wc -l" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "gcat" "cat" "cat" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "cat" "caht" "cat" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "cat" "cat" "chgfat" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "/usrbin/cat" "cat" "cat" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus /dev/urandom "cat" "cat" "head -10" outfile.txt
+-> ok
+
+on unset PATH
+/bin/valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus /dev/urandom "cat" "cat" "head -10" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "" "" "" outfile.txt 
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus Makefile "" "" "ls -l" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex_bonus 00.txt "" "" "ls -l" outfile.txt
+-> ok
