@@ -1,4 +1,4 @@
-pipex
+PIPEX
 
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile cat cat outfile.txt  
@@ -7,54 +7,66 @@ valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kind
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "grep libft.a" "cat" outfile.txt
 -> ok
 
-
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "ls -l" outfile.txt
--> ok - leak de ls
+-> ok
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "ls -l" "wc -l" outfile.txt
 -> ok - leaks des commandes
 
-env -i valgrind --leak-check=full --show-leak-kinds=all ./pipex infile.txt "/bin/ls -l" "wc -l" outfile.txt
+env -i valgrind --leak-check=full --leak-check=full --show-leak-kinds=all ./pipex infile.txt "/bin/ls -l" "wc -l" outfile.txt
 - > ok
+??
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "gcat" "cat" outfile.txt
 -> ok
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "cfat" outfile.txt
--> ok - leak des commandes
+-> ok
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "/usr/bin/cat" "cat" outfile.txt
--> full OK
+-> OK
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "/usrbin/cat" "cat" outfile.txt
 -> ok
 
 valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "ls -l" outfile.txt
--> leaks
+-> ok
 
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex /dev/urandom "cat" "head -10" outfile.txt
+-> ok
 
 On UNSET PATH
+/bin/valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex /dev/urandom "cat" "head -10" outfile.txt
+-> ok
 
-/bin/valgrind --track-fds=yes --trace-children=yes ./pipex /dev/urandom "cat" "head -10" outfile.txt
+=> Manque les messages d'erreur sur UNSET PATH
+-> ok
 
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "" "" outfile.txt 
+-> ok
 
--> Open fds
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "" "ls -l" outfile.txt
+-> ok
 
--> Leaks
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "cat" "" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex Makefile "" "ls -l" outfile.txt
+-> ok
+
+valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all ./pipex 00.txt "" "ls -l" outfile.txt
+-> ok
+
 
 
 
 
 
 ### TO DO
-faire la commande suivante si une echoue
-sleep a voir
-
 gestion des droits sur infile et outfile et executable (command)
 path inexistant
-message erreur quand les commandes ne sont pas trouves (pas de path)
-commande inexistante
 
-./pipex Makefile "cat" "" outfile.txt
-./pipex Makefile "" "" outfile.txt
-./pipex Makefile "" "ls -l" outfile.txt
+
+
+
+supp process IDS

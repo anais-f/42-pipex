@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 19:11:57 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/26 12:08:21 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/26 12:08:39 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "libft.h"
 # include <stdlib.h>
@@ -48,5 +48,6 @@ void	ft_close_child(t_data *data);
 int		last_child(t_data *data, char *str, char **envp, char **cmd);
 int		first_child(t_data *data, char *str, char **envp, char **cmd);
 int		create_child(t_data *data, char **argv, int argc, char **envp);
+int		middle_child(t_data *data, char *str, char **envp, char **cmd);
 
 #endif

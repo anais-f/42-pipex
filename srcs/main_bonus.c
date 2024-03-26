@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 12:50:40 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/26 11:26:29 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/26 11:39:09 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	if (argc != 5)
+	if (argc <= 5)
 	{
 		ft_printf("Error : invalid parameters\n");
 		return (-1);
