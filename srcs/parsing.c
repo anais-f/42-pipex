@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/23 15:24:41 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/26 12:06:53 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2024/03/27 17:57:12 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	find_path_cmd(t_data *data, char **argv, char **envp)
 		free_all(data->cmd, NULL);
 		close(data->pipe_fd[0]);
 		close(data->pipe_fd[1]);
-		return ;
+		close(data->infile_fd);
+		close(data->outfile_fd);
+		ft_printf("Malloc fail : exit");
+		exit (1);
 	}
 	if (data->cmd[0] == 0)
 	{
@@ -107,7 +110,12 @@ void	fork_and_exec(t_data *data, char **argv, int argc, char **envp)
 {
 	data->pid = fork();
 	if (data->pid == -1)
-	{
+	{	
+		free_all(data->cmd, data->str_path);
+		close(data->infile_fd);
+		close(data->outfile_fd);
+		close(data->pipe_fd[0]);
+		close(data->pipe_fd[1]);
 		perror("fork");
 		exit (1);
 	}
