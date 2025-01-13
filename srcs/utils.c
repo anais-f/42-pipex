@@ -6,7 +6,7 @@
 /*   By: anfichet <anfichet@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 13:02:27 by anfichet          #+#    #+#             */
-/*   Updated: 2024/03/26 19:08:25 by anfichet         ###   ########lyon.fr   */
+/*   Updated: 2025/01/13 17:29:03 by anfichet         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,4 @@ void	ft_close_child(t_data *data)
 		close(data->outfile_fd);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
 }
