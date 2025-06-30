@@ -12,9 +12,8 @@
 
 #include "pipex.h"
 
-int	create_child(t_data *data, char **argv, int argc, char **envp)
+int	create_child(t_data *data, int argc, char **envp)
 {
-	(void)argv;
 	if (data->i == 2)
 		first_child(data, data->str_path, envp, data->cmd);
 	if (data->i == argc - 2)

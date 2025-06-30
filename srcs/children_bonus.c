@@ -12,12 +12,17 @@
 
 #include "pipex_bonus.h"
 
-int	create_child(t_data *data, char **argv, int argc, char **envp)
+int	create_child(t_data *data, int argc, char **envp)
 {
-	(void)argv;
-	if (data->i == 2)
+	int	start_index;
+
+	if (data->here_doc == 0)
+		start_index = 2;
+	else if (data->here_doc == 1)
+		start_index = 3;
+	if (data->i == start_index)
 		first_child(data, data->str_path, envp, data->cmd);
-	if (data-> i > 2 && data->i < argc - 2)
+	if (data-> i > start_index && data->i < argc - 2)
 		middle_child(data, data->str_path, envp, data->cmd);
 	if (data->i == argc - 2)
 		last_child(data, data->str_path, envp, data->cmd);

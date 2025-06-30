@@ -32,6 +32,8 @@ SRCS_BONUS =\
 		utils_bonus.c \
 		children_bonus.c \
 		parsing_bonus.c \
+		here_doc_bonus.c \
+		utils_init_bonus.c \
 		
 SRCS_BONUS := $(SRCS_BONUS:%=$(SRCS_DIR)/%)
 

@@ -30,7 +30,7 @@ int	main(int argc, char **argv, char **envp)
 			exit (1);
 		}
 		find_path_cmd(&data, argv, envp);
-		fork_and_exec(&data, argv, argc, envp);
+		fork_and_exec(&data, argc, envp);
 	}
 	close_parent(&data);
 	while (waitpid(-1, NULL, 0) > 0)

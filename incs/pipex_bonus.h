@@ -31,9 +31,10 @@ typedef struct s_data
 	pid_t	pid;
 	char	**cmd;
 	char	*str_path;
+	int		here_doc;
 }	t_data;
 
-void	fork_and_exec(t_data *data, char **argv, int argc, char **envp);
+void	fork_and_exec(t_data *data, int argc, char **envp);
 char	*parse_env_and_path(char **envp, char **cmd);
 char	*check_join_path(char **array, t_data *data, char **envp);
 char	*check_abs_path(char **cmd);
@@ -46,10 +47,12 @@ void	init_and_open_var(t_data *data, int argc, char **argv);
 void	ft_close_child(t_data *data);
 int		last_child(t_data *data, char *str, char **envp, char **cmd);
 int		first_child(t_data *data, char *str, char **envp, char **cmd);
-int		create_child(t_data *data, char **argv, int argc, char **envp);
+int		create_child(t_data *data, int argc, char **envp);
 int		middle_child(t_data *data, char *str, char **envp, char **cmd);
 void	error_with_file(t_data *data, char *str, char **cmd);
 void	close_parent(t_data *data);
 void	close_str_null(char *str, char **cmd);
+int		handle_here_doc(t_data *data, char *limiter);
+void	init_and_open_var_here_doc(t_data *data, int argc, char **argv);
 
 #endif

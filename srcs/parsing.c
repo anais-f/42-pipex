@@ -106,7 +106,7 @@ char	*check_abs_path(char **cmd)
 	return (path_cmd);
 }
 
-void	fork_and_exec(t_data *data, char **argv, int argc, char **envp)
+void	fork_and_exec(t_data *data, int argc, char **envp)
 {
 	data->pid = fork();
 	if (data->pid == -1)
@@ -120,7 +120,7 @@ void	fork_and_exec(t_data *data, char **argv, int argc, char **envp)
 		exit (1);
 	}
 	if (data->pid == 0)
-		create_child(data, argv, argc, envp);
+		create_child(data, argc, envp);
 	dup2(data->pipe_fd[0], data->temp_fd_in);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);

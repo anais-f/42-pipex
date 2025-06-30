@@ -12,53 +12,69 @@
 
 #include "pipex_bonus.h"
 
+static void	process_commands(t_data *data, char **argv, int argc, char **envp);
+static int	setup_data(t_data *data, int argc, char **argv);
+static int	check_arguments(int argc, char **argv);
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	if (argc <= 5)
-	{
-		ft_printf("Error : invalid parameters\n");
+	if (check_arguments(argc, argv) == -1)
 		return (-1);
-	}
-	init_and_open_var(&data, argc, argv);
-	while (data.i < argc - 1)
-	{
-		if (pipe(data.pipe_fd) == -1)
-		{
-			perror("Pipe");
-			exit (1);
-		}
-		find_path_cmd(&data, argv, envp);
-		fork_and_exec(&data, argv, argc, envp);
-	}
+	if (setup_data(&data, argc, argv) == -1)
+		return (-1);
+	process_commands(&data, argv, argc, envp);
 	close_parent(&data);
 	while (waitpid(-1, NULL, 0) > 0)
 		;
 	return (0);
 }
 
-void	init_and_open_var(t_data *data, int argc, char **argv)
+static int	check_arguments(int argc, char **argv)
 {
-	data->infile_fd = open(argv[1], O_RDONLY);
-	if (data->infile_fd == -1)
-		perror (argv[1]);
-	data->outfile_fd = 0;
-	data->outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (data->outfile_fd == -1)
-		perror (argv[argc -1]);
-	data->temp_fd_in = 0;
-	data->i = 2;
-	data->pid = 0;
-	data->cmd = NULL;
-	data->str_path = NULL;
+	if (argc <= 5)
+	{
+		ft_printf("Error : invalid parameters\n");
+		return (-1);
+	}
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0 && argc < 6)
+	{
+		ft_printf("Error : invalid parameters for here_doc\n");
+		return (-1);
+	}
+	return (0);
 }
 
-void	close_parent(t_data *data)
+static int	setup_data(t_data *data, int argc, char **argv)
 {
-	if (data->infile_fd != -1)
-		close(data->infile_fd);
-	if (data->outfile_fd != -1)
-		close(data->outfile_fd);
-	close(data->temp_fd_in);
+	data->here_doc = 0;
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	{
+		data->here_doc = 1;
+		init_and_open_var_here_doc(data, argc, argv);
+		if (handle_here_doc(data, argv[2]) == -1)
+		{
+			ft_printf("Error : here_doc failed\n");
+			return (-1);
+		}
+	}
+	else
+		init_and_open_var(data, argc, argv);
+	return (0);
+}
+
+static void	process_commands(t_data *data, char **argv, int argc, char **envp)
+{
+	while (data->i < argc - 1)
+	{
+		if (pipe(data->pipe_fd) == -1)
+		{
+			perror("Pipe");
+			exit(1);
+		}
+		find_path_cmd(data, argv, envp);
+		fork_and_exec(data, argc, envp);
+	}
 }
